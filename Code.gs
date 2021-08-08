@@ -104,28 +104,14 @@ function getFormattedActiveRow(){
   Logger.log(rowIndex);
 
   var range = registration.getRange(rowIndex, 2, 1, 5);
-  // var values = range.getValues();
-  // for (var row in values) {
-  //   for (var col in values[row]) {
-  //     Logger.log(values[row][col]);
-  //   }
-  // }
-  // Logger.log(data);
-
-
+  var values = range.getValues()
   var formattedDate = Utilities.formatDate(values[0][0], "PST", "MM/dd/yyyy");
 
   var firstName = values[0][1];
   var lastName = values[0][2];
   var gender = values[0][3];
   var formattedBirthdate = Utilities.formatDate(values[0][4], "PST", "MM/dd/yyyy");
-  var label = 
-`${formattedDate}
-${lastName}, ${firstName} 
-${gender}
-DOB: ${formattedBirthdate}`;
-  Logger.log(label);
-
+  var label = `${formattedDate}\n${lastName}, ${firstName}\n${gender}\nDOB: ${formattedBirthdate}`;
 
   //first cell sheet.getRange("A1")
   return label;

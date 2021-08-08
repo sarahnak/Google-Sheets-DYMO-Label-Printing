@@ -23,7 +23,9 @@
       <div class="block form-group">
         <b>Label text preview: </b>
         <p class="text-box" id="labelPreview"> Sample label text here. </p>
+        <button id="labelRefreshButton">Print from selected cell or row</button>
       </div>
+      <br>
       <div id="printersDiv">
         <b> Printer: </b>
         <p id="printerName"></p>
@@ -51,6 +53,7 @@
 
 
       $( document ).ready(function() {
+      
       function onFailure(error) {
         alert(error.message);
         labelText = "Sample label text here.";
@@ -94,6 +97,14 @@
                 console.log("No LabelWriter printers found. Install LabelWriter printer");
                 
           }
+
+        $('#labelRefreshButton').click(function(){
+          google.script.run.withSuccessHandler(function(ret){
+            labelText = ret;
+            var obj = $("#labelPreview").text(labelText);
+            obj.html(obj.html().replace(/\n/g,'<br/>'));
+        }).withFailureHandler(onFailure).getFormattedActiveRow();
+        })
 
         $( "#printButton" ).click(function() {
            try
