@@ -23,7 +23,7 @@
       <div class="block form-group">
         <b>Label text preview: </b>
         <p class="text-box" id="labelPreview"> Sample label text here. </p>
-        <button id="labelRefreshButton">Print from selected cell or row</button>
+        <button id="labelRefreshButton">Create label from selected cell/row</button>
       </div>
       <br>
       <div id="printersDiv">
@@ -54,15 +54,15 @@
 
       $( document ).ready(function() {
       
-      function onFailure(error) {
-        alert(error.message);
+      function onLabelFailure(error) {
+        alert("Unable to update label text.\n" + error.message);
         labelText = "Sample label text here.";
       }
         google.script.run.withSuccessHandler(function(ret){
           labelText = ret;
           var obj = $("#labelPreview").text(labelText);
           obj.html(obj.html().replace(/\n/g,'<br/>'));
-        }).withFailureHandler(onFailure).getFormattedLastNewline();
+        }).withFailureHandler(onLabelFailure).getFormattedLastNewline();
 
         
         console.log("Looking for DYMO Printers.");
@@ -103,7 +103,8 @@
             labelText = ret;
             var obj = $("#labelPreview").text(labelText);
             obj.html(obj.html().replace(/\n/g,'<br/>'));
-        }).withFailureHandler(onFailure).getFormattedActiveRow();
+            console.log("Updated label text sucessfully.");
+        }).withFailureHandler(onLabelFailure).getFormattedActiveRow();
         })
 
         $( "#printButton" ).click(function() {
@@ -139,7 +140,7 @@
                 var label = dymo.label.framework.openLabelXml(labelXml);
                 // set label text
                 label.setObjectText("Text", labelText);
-                
+                console.log("Printing...");
                 // finally print the label
                 label.print(printerNameFinal);
             }

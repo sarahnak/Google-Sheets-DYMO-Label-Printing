@@ -22,8 +22,10 @@
     <div class="sidebar branding-below">
       <div class="block form-group">
         <b>Label text preview: </b>
-        <p class="text-box" id="labelPreview"> Testing </p>
+        <p class="text-box" id="labelPreview"> Sample label text here. </p>
+        <button id="labelRefreshButton">Create label from selected cell/row</button>
       </div>
+      <br>
       <div id="printersDiv">
         <b> Printer: </b>
         <p id="printerName"></p>
@@ -46,15 +48,15 @@
 
       $( document ).ready(function() {
         
-      function onFailure(error) {
-        alert(error.message);
+      function onLabelFailure(error) {
+        alert("Unable to update label text.\n" + error.message);
         labelText = "Sample label text here.";
       }
         google.script.run.withSuccessHandler(function(ret){
           labelText = ret;
           var obj = $("#labelPreview").text(labelText);
           obj.html(obj.html().replace(/\n/g,'<br/>'));
-        }).withFailureHandler(onFailure).getFormattedLastNewline();
+        }).withFailureHandler(onLabelFailure).getFormattedLastNewline();
         
         console.log("Looking for DYMO Printers.");
 
@@ -84,6 +86,14 @@
                 console.log("No LabelWriter printers found. Install LabelWriter printer");
                 
           }
+
+        $('#labelRefreshButton').click(function(){
+          google.script.run.withSuccessHandler(function(ret){
+            labelText = ret;
+            var obj = $("#labelPreview").text(labelText);
+            obj.html(obj.html().replace(/\n/g,'<br/>'));
+        }).withFailureHandler(onLabelFailure).getFormattedActiveRow();
+        })
 
         $( "#printButton" ).click(function() {
            try
