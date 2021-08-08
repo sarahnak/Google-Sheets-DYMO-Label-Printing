@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="stylesheet" href="https://ssl.gstatic.com/docs/script/css/add-ons1.css">
+    <!-- The CSS package above applies Google styling to buttons and other elements. -->
+    <style>
+    <!-- Some supplemental styling stolen from the Google Translate Apps Script example. -->
+    .branding-below {
+      bottom: 56px;
+      top: 0;
+    }
+    .width-100 {
+      width: 100%;
+    }
+    .text-box{
+      border-style:solid;
+    }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar branding-below">
+      <div class="block form-group">
+        <b>Label text preview: </b>
+        <p class="text-box" id="labelPreview"> Testing </p>
+      </div>
+      <div id="printersDiv">
+        <b> Printer: </b>
+        <p id="printerName"></p>
+        <button id="printButton">Print</button>
+	    </div>
+    </div>
+    <div class="sidebar bottom">
+      <textarea class="width-100 secondary" id="console-output" rows="20"></textarea>
+    </div>
+
+    <!-- JQuery import -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+  <!-- From DYMO.html, which is the DYMO Label Framework 3.0 found at http://labelwriter.com/software/dls/sdk/js/DYMO.Label.Framework.3.0.js. Workaround to DYMO not hosting files over HTTPS-->
+  <?!= include('DYMO')?>
+    <script>
+      var labelText;
+      var printerNameFinal = "No printer found.";
+      var printers;
+
+      $( document ).ready(function() {
+        
+        //add change label text button so this can be refreshed
+        //import JS?
+        google.script.run.withSuccessHandler(function(ret){
+          labelText = ret;
+          var obj = $("#labelPreview").text(labelText);
+          //Formatting label text for the HTML, since /n doesn't work
+          obj.html(obj.html().replace(/\n/g,'<br/>'));
+        }).getFormattedLastNewline();
+        
+        console.log("Looking for DYMO Printers.");
+
+          printers = dymo.label.framework.getPrinters();
+          console.log(printers);
+          if(printers.length == 0){
+            console.log("No DYMO printers are installed.");
+          }
+          else{
+            printers.forEach(element => console.log(element.name));
+            console.log("Finding a LabelWriter printer");
+
+            //for convenience just finding the first available LabelWriter printer
+            //everything at HepBFree is a LabelWriter 450 Turbo 
+            var i = 0, max;
+            for (var i = 0; i < printers.length; ++i){
+              var printer = printers[i];
+              if (printer.printerType == "LabelWriterPrinter")
+              {
+                  printerNameFinal = printer.name;
+                  console.log("Printer connected: " + printerNameFinal);
+                  $("#printerName").text(printerNameFinal);
+                  break;
+              }
+            }
+                  
+            if (printerNameFinal == "No printer found.")
+                console.log("No LabelWriter printers found. Install LabelWriter printer");
+                
+          }
+
+        $( "#printButton" ).click(function() {
+           try
+            {
+              if(printerNameFinal != "No printer found."){
+                google.script.run.withSuccessHandler(function(ret){
+                   var label = dymo.label.framework.openLabelXml(ret);
+                   label.setObjectText("Text", labelText);
+                
+                // finally print the label
+                label.print(printerNameFinal);
+                }).getLabelXml();
+              }
+              else{
+                console.log("Cannot print without printer connected.");
+              }
+
+            }
+            catch(e)
+            {
+                alert(e.message || e);
+            }
+        }
+        );
+      });
+    </script>
+
+
+    <!-- Writing the console output to the sidebar. From Dymo Cryolabel -->
+    <script> 
+    var logger = (function() {
+      // Store the pointer to the runtime's console.log function.
+      var nativeLog = console.log;
+
+      // Override console.log with our own function.
+      console.log = function (message) {
+        // Do not call console.log from within this function.
+        _updateTextArea(message);
+        nativeLog.apply(console, arguments);
+      }; 
+      
+      function _updateTextArea(message) {
+        // Do not call console.log from within this function.
+        var element = document.getElementById("console-output");
+        var prefix = "";
+        if (element.value) {prefix = element.value + "\n";}
+        element.value = prefix + message;
+        element.scrollTop = element.scrollHeight; 
+      }
+    })();
+    </script>
+  </body>
+</html>
