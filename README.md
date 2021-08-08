@@ -23,10 +23,7 @@ Currently, the project takes the last line of the spreadsheet and formats it as 
 You can just write your own method to replace getFormattedLastNewLine.
 
 ### Label XML
-This just uses the default address label XML provided in [the sample by DYMO](https://developers.dymo.com/2010/06/02/dymo-label-framework-javascript-library-samples-print-a-label/), but if you wanted to change it you could design your own layout in the Dymo Label Software and copy/pasting the text of the .label file into the labelXml variable.
+This just uses the default address label XML provided in [the sample by DYMO](https://developers.dymo.com/2010/06/02/dymo-label-framework-javascript-library-samples-print-a-label/), but if you wanted to change it you could design your own layout in the Dymo Label Software and copy/paste the text of the .label file into the labelXml variable.
 
-### Which printer you use
-I use the first LabelWriter printer that's connected. You can change the printerNameFinal variable in the Sidebar remote DYMO.html file to something that works for you.
-
-
-
+### Printers used
+I use the first LabelWriter printer that's connected. You can change how the printerNameFinal variable in the Sidebar remote DYMO.html file is set to something that works for you.
