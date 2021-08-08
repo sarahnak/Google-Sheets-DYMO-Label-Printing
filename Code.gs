@@ -15,6 +15,51 @@ function onOpen() {
     
 }
 
+/**
+ * Format the patient response currently selected (cell or row) as label text with newline characters.
+ */
+function getFormattedActiveRow(){
+  var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
+  var rowIndex = registration.getActiveCell().getRowIndex();
+  Logger.log(rowIndex);
+
+  var range = registration.getRange(rowIndex, 2, 1, 5);
+  var values = range.getValues()
+  var formattedDate = Utilities.formatDate(values[0][0], "PST", "MM/dd/yyyy");
+
+  var firstName = values[0][1];
+  var lastName = values[0][2];
+  var gender = values[0][3];
+  var formattedBirthdate = Utilities.formatDate(values[0][4], "PST", "MM/dd/yyyy");
+  var label = `${formattedDate}\n${lastName}, ${firstName}\n${gender}\nDOB: ${formattedBirthdate}`;
+
+  return label;
+
+}
+
+/**
+ * Formats data fields in the same way as getFormattedLast, but with \n characters. Necessary to set as label text.
+ */
+function getFormattedLastNewline(){
+  var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
+  var lastRowIndex = registration.getLastRow();
+
+  var range = registration.getRange(lastRowIndex, 2, 1, 5);
+  var values = range.getValues();
+
+  var formattedDate = Utilities.formatDate(values[0][0], "PST", "MM/dd/yyyy");
+  Logger.log(formattedDate);
+
+  var firstName = values[0][1];
+  // Logger.log(firstName);
+  var lastName = values[0][2];
+  var gender = values[0][3];
+  var formattedBirthdate = Utilities.formatDate(values[0][4], "PST", "MM/dd/yyyy");
+  var label = `${formattedDate}\n${lastName}, ${firstName}\n${gender}\nDOB: ${formattedBirthdate}`;
+  Logger.log(label);
+
+  return label;
+}
 
 /**
  * Write the last patient response, formatted as a blood test label, to the A1 cell in the Labels sheet
@@ -89,53 +134,6 @@ function getFormattedLast(){
 ${lastName}, ${firstName} 
 ${gender}
 DOB: ${formattedBirthdate}`;
-  Logger.log(label);
-
-  return label;
-}
-
-/**
- * (TODO) Format the patient response currently selected (cell selected? row selected?) as label text.
- */
-function getFormattedActiveRow(){
-  var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
-  var rowIndex = registration.getActiveCell().getRowIndex();
-  Logger.log(rowIndex);
-
-  var range = registration.getRange(rowIndex, 2, 1, 5);
-  var values = range.getValues()
-  var formattedDate = Utilities.formatDate(values[0][0], "PST", "MM/dd/yyyy");
-
-  var firstName = values[0][1];
-  var lastName = values[0][2];
-  var gender = values[0][3];
-  var formattedBirthdate = Utilities.formatDate(values[0][4], "PST", "MM/dd/yyyy");
-  var label = `${formattedDate}\n${lastName}, ${firstName}\n${gender}\nDOB: ${formattedBirthdate}`;
-
-  //first cell sheet.getRange("A1")
-  return label;
-
-}
-
-/**
- * Formats data fields in the same way as getFormattedLast, but with \n characters. Necessary to set as label text.
- */
-function getFormattedLastNewline(){
-  var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
-  var lastRowIndex = registration.getLastRow();
-
-  var range = registration.getRange(lastRowIndex, 2, 1, 5);
-  var values = range.getValues();
-
-  var formattedDate = Utilities.formatDate(values[0][0], "PST", "MM/dd/yyyy");
-  Logger.log(formattedDate);
-
-  var firstName = values[0][1];
-  // Logger.log(firstName);
-  var lastName = values[0][2];
-  var gender = values[0][3];
-  var formattedBirthdate = Utilities.formatDate(values[0][4], "PST", "MM/dd/yyyy");
-  var label = `${formattedDate}\n${lastName}, ${firstName}\n${gender}\nDOB: ${formattedBirthdate}`;
   Logger.log(label);
 
   return label;
