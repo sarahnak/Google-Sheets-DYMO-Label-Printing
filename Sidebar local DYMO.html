@@ -46,19 +46,19 @@
 
       $( document ).ready(function() {
         
-        //add change label text button so this can be refreshed
-        //import JS?
+      function onFailure(error) {
+        alert(error.message);
+        labelText = "Sample label text here.";
+      }
         google.script.run.withSuccessHandler(function(ret){
           labelText = ret;
           var obj = $("#labelPreview").text(labelText);
-          //Formatting label text for the HTML, since /n doesn't work
           obj.html(obj.html().replace(/\n/g,'<br/>'));
-        }).getFormattedLastNewline();
+        }).withFailureHandler(onFailure).getFormattedLastNewline();
         
         console.log("Looking for DYMO Printers.");
 
           printers = dymo.label.framework.getPrinters();
-          console.log(printers);
           if(printers.length == 0){
             console.log("No DYMO printers are installed.");
           }

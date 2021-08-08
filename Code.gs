@@ -19,7 +19,8 @@ function onOpen() {
 
 /**
  * Write the last patient response, formatted as a blood test label, to the A1 cell in the Labels sheet
- * Anything in the cell will be overwritten
+ * Anything in the cell will be overwritten.
+ * 
  */
 function writeLastPatient(){
   var label = getFormattedLast();
@@ -61,7 +62,7 @@ DOB: ${formattedBirthdate}`;
 
 /**
  * Formats the last patient response text as a blood test label text (JavaScript string literal) and returns it
- *  
+ *  This was used as the temp fix of copy pasting an address-label formatted text into DYMO connect for printing.
 */  
 
 function getFormattedLast(){
@@ -91,14 +92,6 @@ ${gender}
 DOB: ${formattedBirthdate}`;
   Logger.log(label);
 
-  // for (var row in values) {
-  //   for (var col in values[row]) {
-  //     Logger.log(values[row][col]);
-  //   }
-  // }
-  // Logger.log(data);
-
-  //first cell sheet.getRange("A1")
   return label;
 }
 
@@ -139,6 +132,9 @@ DOB: ${formattedBirthdate}`;
 
 }
 
+/**
+ * Formats data fields in the same way as getFormattedLast, but with \n characters. Necessary to set as label text.
+ */
 function getFormattedLastNewline(){
   var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
   var lastRowIndex = registration.getLastRow();
