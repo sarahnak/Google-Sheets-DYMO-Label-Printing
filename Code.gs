@@ -11,9 +11,9 @@ function onOpen() {
     .addItem('Format last response', 'writeLastPatient')
     .addSeparator()
 
-    .addItem('Print Blood Test Label', 'showMySidebar')
-    .addItem('print (github DYMO)', 'showSidebarRemoteDYMO')
-    .addItem('print (local js file)', 'showSidebarLocalDYMO')
+    // .addItem('Print Blood Test Label', 'showMySidebar')
+    .addItem('Print Labels', 'showSidebarRemoteDYMO')
+    // .addItem('print (local js file)', 'showSidebarLocalDYMO')
     .addToUi();
     
 }
