@@ -6,7 +6,7 @@ Google Apps Script project to print Google Sheets form data to a DYMO LabelWrite
 1. Install [the DYMO Label Software (Windows)](https://s3.amazonaws.com/download.dymo.com/dymo/Software/Win/DLS8Setup8.7.4.exe).
 Other versions are available [here](https://www.labelvalue.com/dymo-software-and-drivers).
 
-2. Copy and paste [Code.gs](Code.gs), [MySidebarFunctions.gs](MySidebarFunctions.gs), and [Sidebar remote DYMO.html](https://github.com/sarahnak/Google-Sheets-DYMO-Label-Printing/blob/d380ec3c022a1033c735e0d0290567d09dfca11a/Sidebar%20remote%20DYMO.html) into a new Google Apps Script project attached to a spreadsheet.
+2. Copy and paste [Code.gs](Code.gs), [MySidebarFunctions.gs](MySidebarFunctions.gs), and [Sidebar remote DYMO.html](https://github.com/sarahnak/Google-Sheets-DYMO-Label-Printing/blob/d380ec3c022a1033c735e0d0290567d09dfca11a/Sidebar%20remote%20DYMO.html) into a new Google Apps Script project attached to a spreadsheet. Name the first sheet "Registration".
 
 3. Connect a DYMO LabelWriter printer. 
 
