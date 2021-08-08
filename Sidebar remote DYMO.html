@@ -58,13 +58,18 @@
         
         console.log("Looking for DYMO Printers.");
 
-          printers = dymo.label.framework.getPrinters();
+          try {
+            printers = dymo.label.framework.getPrinters()
+          } catch (error) {
+            console.log("There was an error loading the DYMO framework.");
+          }
+
           // console.log(printers);
           if(printers.length == 0){
             console.log("No DYMO printers are installed.");
           }
           else{
-            printers.forEach(element => console.log(element.name));
+            // printers.forEach(element => console.log(element.name));
             console.log("Finding a LabelWriter printer");
 
             var i = 0, max;
@@ -72,7 +77,6 @@
               var printer = printers[i];
               if (printer.printerType == "LabelWriterPrinter")
               {
-                  console.log("Printer connected: " + printerNameFinal);
                   printerNameFinal = printer.name;
                   $("#printerName").text(printerNameFinal);
                   console.log("Printer connected: " + printerNameFinal);
@@ -80,7 +84,7 @@
               }
             }
                   
-            if (printerName == "")
+            if (printerNameFinal == "No printer found.")
                 console.log("No LabelWriter printers found. Install LabelWriter printer");
                 
           }
