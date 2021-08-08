@@ -4,7 +4,7 @@
 //Will read from the JS library hosted on my Github account. Works
 function showSidebarRemoteDYMO() {
   var html = HtmlService.createHtmlOutputFromFile('Sidebar remote DYMO')
-      .setTitle('DYMO Labels (github library)')
+      .setTitle('DYMO Blood Sample Labels')
       .setSandboxMode(HtmlService.SandboxMode.IFRAME);
   SpreadsheetApp.getUi().showSidebar(html);
 };
@@ -13,7 +13,7 @@ function showSidebarRemoteDYMO() {
 function showSidebarLocalDYMO() {
   var htmlOutput = HtmlService.createTemplateFromFile('Sidebar local DYMO')
       .evaluate()
-      .setTitle('DYMO labels (local JS file)')
+      .setTitle('DYMO Blood Sample Labels (Local JS file)')
       // .getCode();
       .setSandboxMode(HtmlService.SandboxMode.IFRAME);
   SpreadsheetApp.getUi().showSidebar(htmlOutput);

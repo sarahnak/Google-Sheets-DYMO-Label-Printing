@@ -6,12 +6,11 @@
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
   ui.createMenu('Labels')
-    .addItem('Format all responses', 'allPatients')
-
-    .addItem('Format last response', 'writeLastPatient')
-    .addSeparator()
     .addItem('Print Labels', 'showSidebarRemoteDYMO')
     // .addItem('print (local js file)', 'showSidebarLocalDYMO')
+    .addSeparator()
+    .addItem('Format last response', 'writeLastPatient')
+    .addItem('Format all responses', 'allPatients')
     .addToUi();
     
 }
