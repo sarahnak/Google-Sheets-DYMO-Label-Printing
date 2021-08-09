@@ -18,9 +18,9 @@ Other versions are available [here](https://www.labelvalue.com/dymo-software-and
 
 ### Label text
 
-Currently, the project takes the last line of the spreadsheet and formats it as a JavaScript string literal (getFormattedLast in Code.gs). This is set to the text value of the label in [Sidebar remote DYMO.html](https://github.com/sarahnak/Google-Sheets-DYMO-Label-Printing/blob/d380ec3c022a1033c735e0d0290567d09dfca11a/Sidebar%20remote%20DYMO.html). 
+Currently, the project takes a row of the spreadsheet and formats it as a JavaScript string literal (rowValuesToLabelFormat in Code.gs). This is set to the text value of the label in [Sidebar remote DYMO.html](https://github.com/sarahnak/Google-Sheets-DYMO-Label-Printing/blob/d380ec3c022a1033c735e0d0290567d09dfca11a/Sidebar%20remote%20DYMO.html). 
 
-You can just write your own method to replace getFormattedLast.
+You can just write your own method to replace rowValuesToLabelFormat.
 
 ### Label XML
 This just uses the default address label XML provided in [the sample by DYMO](https://developers.dymo.com/2010/06/02/dymo-label-framework-javascript-library-samples-print-a-label/), but if you wanted to change it you could design your own layout in the Dymo Label Software and copy/paste the text of the .label file into the labelXml variable.
