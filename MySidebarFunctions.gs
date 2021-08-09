@@ -9,7 +9,7 @@ function showSidebarRemoteDYMO() {
   SpreadsheetApp.getUi().showSidebar(html);
 };
 
-//Imports the JS library as a .html file in this project. Works
+//Imports the JS library as a .html file in this project. Works but not used
 function showSidebarLocalDYMO() {
   var htmlOutput = HtmlService.createTemplateFromFile('Sidebar local DYMO')
       .evaluate()
@@ -20,8 +20,8 @@ function showSidebarLocalDYMO() {
 
 };
 
-// Loading the HTMLtemplate with this XML code in it wouldn't compile - this is the other workaround. I think it's something with how the server reads/transforms the HTML.
-//Loading as a template is necessary for the sidebar using the DYMO.html file, since scriptlets (ie the import statement) are only executed through being HTMLtemplates
+// Loading the HTMLtemplate for 'Sidebar local DYMO.html' with this XML code in it wouldn't compile - this is the other workaround. I think it's something with how the server reads/transforms the HTML.
+//Loading as a template is necessary for the sidebar using the 'DYMO Label Framework 3.0.html' file, since scriptlets (ie the import statement) are only executed through being HTMLtemplates
 function getLabelXml(){
   return '<?xml version="1.0" encoding="utf-8"?>\
     <DieCutLabel Version="8.0" Units="twips">\
@@ -50,7 +50,7 @@ function getLabelXml(){
     </DieCutLabel>';
 }
 
-//for the DYMO.html in the local DYMO sidebar
+//for the DYMO Label Framework 3.0.html in the local DYMO sidebar
 function include(filename) {
   return HtmlService.createHtmlOutputFromFile(filename).getContent();
 }
