@@ -57,7 +57,7 @@
           labelText = ret;
           var obj = $("#labelPreview").text(labelText);
           obj.html(obj.html().replace(/\n/g,'<br/>'));
-        }).withFailureHandler(onLabelFailure).getFormattedLastNewline();
+        }).withFailureHandler(onLabelFailure).getFormattedLast());
         
         console.log("Looking for DYMO Printers.");
 

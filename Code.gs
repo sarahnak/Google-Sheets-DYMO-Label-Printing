@@ -9,14 +9,14 @@ function onOpen() {
     .addItem('Print Labels', 'showSidebarRemoteDYMO')
     // .addItem('print (local js file)', 'showSidebarLocalDYMO')
     .addSeparator()
-    .addItem('Format last response', 'writeLastPatient')
-    .addItem('Format all responses', 'allPatients')
+    .addItem('Format last response', 'writeLastResponse')
+    .addItem('Format selected response', 'writeActiveResponse')
     .addToUi();
     
 }
 
 /**
- * Format the patient response currently selected (cell or row) as label text with newline characters.
+ * Format the form repsonse currently selected (cell or row in the "Registration" sheet) as label text with newline characters.
  */
 function getFormattedActiveRow(){
   var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
@@ -38,9 +38,9 @@ function getFormattedActiveRow(){
 }
 
 /**
- * Formats data fields in the same way as getFormattedLast, but with \n characters. Necessary to set as label text.
+ * Formats the form response at the bottom of the "Registration" sheet as label text with newline characters
  */
-function getFormattedLastNewline(){
+function getFormattedLast(){
   var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
   var lastRowIndex = registration.getLastRow();
 
@@ -62,20 +62,27 @@ function getFormattedLastNewline(){
 }
 
 /**
- * Write the last patient response, formatted as a blood test label, to the A1 cell in the Labels sheet
- * Anything in the cell will be overwritten.
- * 
+ * Appends the last patient response, formatted as a blood test label, to the first column in the Labels sheet
  */
-function writeLastPatient(){
+function writeLastResponse(){
   var label = getFormattedLast();
   var labels = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Labels");
-  labels.getRange("A1").setValue(label);
+  labels.appendRow([label]);
   labels.autoResizeColumn(1);
-
 }
 
 /**
- * Formats all the patient responses as blood test labels, writes to the first column of the Labels sheet
+ * Appends the selected (by row or cell) patient response, formatted as a blood test label, to the first column in the Labels sheet.
+ */
+function writeActiveResponse(){
+  var label = getFormattedActiveRow();
+  var labels = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Labels");
+  labels.appendRow([label]);
+  labels.autoResizeColumn(1);
+}
+
+/**
+ * Formats all the patient responses as blood test labels, appends to the first column of the Labels sheet
  */
 
 function allPatients(){
@@ -104,40 +111,7 @@ DOB: ${formattedBirthdate}`;
     }
   }
 
-/**
- * Formats the last patient response text as a blood test label text (JavaScript string literal) and returns it
- *  This was used as the temp fix of copy pasting an address-label formatted text into DYMO connect for printing.
-*/  
 
-function getFormattedLast(){
-  // Gets the active sheet.
-  var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
-  var lastRowIndex = registration.getLastRow();
-  // Logger.log(lastRowIndex);
-
-  var range = registration.getRange(lastRowIndex, 2, 1, 5);
-  var values = range.getValues();
-
-
-  // var date = values[0][0];
-  // Logger.log(date);
-  var formattedDate = Utilities.formatDate(values[0][0], "PST", "MM/dd/yyyy");
-  Logger.log(formattedDate);
-
-  var firstName = values[0][1];
-  // Logger.log(firstName);
-  var lastName = values[0][2];
-  var gender = values[0][3];
-  var formattedBirthdate = Utilities.formatDate(values[0][4], "PST", "MM/dd/yyyy");
-  var label = 
-`${formattedDate}
-${lastName}, ${firstName} 
-${gender}
-DOB: ${formattedBirthdate}`;
-  Logger.log(label);
-
-  return label;
-}
 
 /**trying to refactor
  * do this later
