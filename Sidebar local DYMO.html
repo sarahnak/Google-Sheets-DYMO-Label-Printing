@@ -30,11 +30,23 @@
       <div id="printersDiv">
         <b> Printer: </b>
         <p id="printerName"></p>
+      </div>
+      <br>
+      <div>
+        <b>Number to print:</b>
+        <select name="numbers" id="printCount">
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <br>
+        <br>
         <button id="printButton" class="button blue">Print</button>
 	    </div>
     </div>
     <div class="sidebar bottom">
-      <textarea class="width-100 secondary" id="console-output" rows="20"></textarea>
+      <textarea class="width-100 secondary" id="console-output" rows="10"></textarea>
     </div>
 
     <!-- JQuery import -->
@@ -99,13 +111,17 @@
         $( "#printButton" ).click(function() {
            try
             {
+
               if(printerNameFinal != "No printer found."){
                 google.script.run.withSuccessHandler(function(ret){
                    var label = dymo.label.framework.openLabelXml(ret);
                    label.setObjectText("Text", labelText);
                 
+                var count = $('#printCount').val();
                 // finally print the label
-                label.print(printerNameFinal);
+                for(let i = count; i > 0; i--){
+                  label.print(printerNameFinal);
+                }
                 }).getLabelXml();
               }
               else{
