@@ -30,11 +30,23 @@
       <div id="printersDiv">
         <b> Printer: </b>
         <p id="printerName"></p>
+      </div>
+      <br>
+      <div>
+        <b>Number to print:</b>
+        <select name="numbers" id="printCount">
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <br>
+        <br>
         <button id="printButton" class="button blue">Print</button>
 	    </div>
     </div>
     <div class="sidebar bottom">
-      <textarea class="width-100 secondary" id="console-output" rows="20"></textarea>
+      <textarea class="width-100 secondary" id="console-output" rows="10"></textarea>
     </div>
 
   <!-- DYMO just refuses to host this file with https. this will not load without https. try hosting on github and linking to the raw git  -->
@@ -47,17 +59,14 @@
 
 
     <script>
-      var labelText;
+      var labelText = "Sample label text here.";
       var printerNameFinal = "No printer found.";
       var printers;
-
-
 
       $( document ).ready(function() {
       
       function onLabelFailure(error) {
         alert("Unable to update label text.\n" + error.message);
-        labelText = "Sample label text here.";
       }
         google.script.run.withSuccessHandler(function(ret){
           labelText = ret;
@@ -111,6 +120,7 @@
         $( "#printButton" ).click(function() {
            try
             {
+                var count = $('#printCount').val();
                 var label;
                 // open label
                     var labelXml = '<?xml version="1.0" encoding="utf-8"?>\
@@ -138,12 +148,15 @@
             <Bounds X="332" Y="150" Width="4455" Height="1260" />\
         </ObjectInfo>\
     </DieCutLabel>';
-                var label = dymo.label.framework.openLabelXml(labelXml);
+                label = dymo.label.framework.openLabelXml(labelXml);
                 // set label text
                 label.setObjectText("Text", labelText);
                 console.log("Printing...");
                 // finally print the label
-                label.print(printerNameFinal);
+                for(let i = count; i > 0; i--){
+                  label.print(printerNameFinal);
+                }
+                
             }
             catch(e)
             {
