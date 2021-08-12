@@ -25,7 +25,6 @@
         <p class="text-box" id="addressLabelPreview"> Sample label text here.</p>
         <button id="printAddressButton" class="blue">Print</button>
       </div>
-      <br>
       <hr>
       <div id="bloodSampleDiv">
         <b>Blood sample label: </b>
@@ -68,51 +67,83 @@
       var labelText = "Sample label text here.";
       var printerNameFinal = "No printer found.";
       var printers;
+      var labelXml = '<?xml version="1.0" encoding="utf-8"?>\
+      <DieCutLabel Version="8.0" Units="twips">\
+          <PaperOrientation>Landscape</PaperOrientation>\
+          <Id>Address</Id>\
+          <PaperName>30252 Address</PaperName>\
+          <DrawCommands/>\
+          <ObjectInfo>\
+              <TextObject>\
+                  <Name>Text</Name>\
+                  <ForeColor Alpha="255" Red="0" Green="0" Blue="0" />\
+                  <BackColor Alpha="0" Red="255" Green="255" Blue="255" />\
+                  <LinkedObjectName></LinkedObjectName>\
+                  <Rotation>Rotation0</Rotation>\
+                  <IsMirrored>False</IsMirrored>\
+                  <IsVariable>True</IsVariable>\
+                  <HorizontalAlignment>Left</HorizontalAlignment>\
+                  <VerticalAlignment>Middle</VerticalAlignment>\
+                  <TextFitMode>ShrinkToFit</TextFitMode>\
+                  <UseFullFontHeight>True</UseFullFontHeight>\
+                  <Verticalized>False</Verticalized>\
+                  <StyledText/>\
+              </TextObject>\
+              <Bounds X="332" Y="150" Width="4455" Height="1260" />\
+          </ObjectInfo>\
+      </DieCutLabel>';
 
       $( document ).ready(function() {
       
-      function onLabelFailure(error) {
-        alert("Unable to update label text.\n" + error.message);
-      }
+        function onLabelFailure(error) {
+          console.log("Unable to update label text.\n" + error.message);
+        }
+
         google.script.run.withSuccessHandler(function(ret){
           labelText = ret;
           var obj = $("#labelPreview").text(labelText);
           obj.html(obj.html().replace(/\n/g,'<br/>'));
         }).withFailureHandler(onLabelFailure).getFormattedLast();
 
+        google.script.run.withSuccessHandler(function(ret){
+          labelText = ret;
+          var obj = $("#addressLabelPreview").text(labelText);
+          obj.html(obj.html().replace(/\n/g,'<br/>'));
+        }).withFailureHandler(onLabelFailure).getAddressFormatLastRow();
         
         console.log("Looking for DYMO Printers.");
 
-          try {
-            printers = dymo.label.framework.getPrinters()
-          } catch (error) {
-            console.log("There was an error loading the DYMO framework.");
-          }
+        try {
+          printers = dymo.label.framework.getPrinters()
+        } catch (error) {
+          console.log("There was an error loading the DYMO framework.");
+        }
 
-          // console.log(printers);
-          if(printers.length == 0){
-            console.log("No DYMO printers are installed.");
-          }
-          else{
-            // printers.forEach(element => console.log(element.name));
-            console.log("Finding a LabelWriter printer");
+        // console.log(printers);
+        if(printers.length == 0){
+          console.log("No DYMO printers are installed.");
+        }
+        else{
+          // printers.forEach(element => console.log(element.name));
+          console.log("Finding a LabelWriter printer");
 
-            var i = 0, max;
-            for (var i = 0; i < printers.length; ++i){
-              var printer = printers[i];
-              if (printer.printerType == "LabelWriterPrinter")
-              {
-                  printerNameFinal = printer.name;
-                  $("#printerName").text(printerNameFinal);
-                  console.log("Printer connected: " + printerNameFinal);
-                  break;
-              }
+          var i = 0, max;
+          for (var i = 0; i < printers.length; ++i){
+            var printer = printers[i];
+            if (printer.printerType == "LabelWriterPrinter")
+            {
+                printerNameFinal = printer.name;
+                $("#printerName").text(printerNameFinal);
+                console.log("Printer connected: " + printerNameFinal);
+                break;
             }
-                  
-            if (printerNameFinal == "No printer found.")
-                console.log("No LabelWriter printers found. Install LabelWriter printer");
-                
           }
+                
+          if (printerNameFinal == "No printer found.")
+              console.log("No LabelWriter printers found. Install LabelWriter printer");
+              
+        }
+
 
         $('#labelRefreshButton').click(function(){
           google.script.run.withSuccessHandler(function(ret){
@@ -127,34 +158,7 @@
            try
             {
                 var count = $('#printCount').val();
-                var label;
-                // open label
-                    var labelXml = '<?xml version="1.0" encoding="utf-8"?>\
-    <DieCutLabel Version="8.0" Units="twips">\
-        <PaperOrientation>Landscape</PaperOrientation>\
-        <Id>Address</Id>\
-        <PaperName>30252 Address</PaperName>\
-        <DrawCommands/>\
-        <ObjectInfo>\
-            <TextObject>\
-                <Name>Text</Name>\
-                <ForeColor Alpha="255" Red="0" Green="0" Blue="0" />\
-                <BackColor Alpha="0" Red="255" Green="255" Blue="255" />\
-                <LinkedObjectName></LinkedObjectName>\
-                <Rotation>Rotation0</Rotation>\
-                <IsMirrored>False</IsMirrored>\
-                <IsVariable>True</IsVariable>\
-                <HorizontalAlignment>Left</HorizontalAlignment>\
-                <VerticalAlignment>Middle</VerticalAlignment>\
-                <TextFitMode>ShrinkToFit</TextFitMode>\
-                <UseFullFontHeight>True</UseFullFontHeight>\
-                <Verticalized>False</Verticalized>\
-                <StyledText/>\
-            </TextObject>\
-            <Bounds X="332" Y="150" Width="4455" Height="1260" />\
-        </ObjectInfo>\
-    </DieCutLabel>';
-                label = dymo.label.framework.openLabelXml(labelXml);
+                var label = dymo.label.framework.openLabelXml(labelXml);
                 // set label text
                 label.setObjectText("Text", labelText);
                 console.log("Printing...");
@@ -170,6 +174,27 @@
             }
         }
         );
+
+        // $( "#printAddressButton" ).click(function() {
+        //    try
+        //     {
+        //         var label = dymo.label.framework.openLabelXml(labelXml);
+        //         // set label text
+        //         label.setObjectText("Text", labelText);
+        //         console.log("Printing...");
+        //         // finally print the label
+        //         for(let i = count; i > 0; i--){
+        //           label.print(printerNameFinal);
+        //         }
+                
+        //     }
+        //     catch(e)
+        //     {
+        //         alert(e.message || e);
+        //     }
+        // }
+        // );
+        
       });
     </script>
 
