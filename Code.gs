@@ -98,13 +98,13 @@ function getAddressFormatLastRow(){
 /**
  * Format the form repsonse currently selected (cell or row in the "Registration" sheet) as mailing address label text.
  */
-function getFormattedActiveRow(){
+function getAddressFormatActiveRow(){
   var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
   var rowIndex = registration.getActiveCell().getRowIndex();
   var range = registration.getRange(rowIndex, 3, 1, 9);
 
   var values = range.getValues()
-  var label = rowValuesToLabelFormat(values);
+  var label = rowValuesToAddressLabelFormat(values);
 
   Logger.log(label);
   return label;
