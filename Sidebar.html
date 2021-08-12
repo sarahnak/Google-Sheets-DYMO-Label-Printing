@@ -65,6 +65,7 @@
 
     <script>
       var labelText = "Sample label text here.";
+      var addressLabelText = "Sample address label here.";
       var printerNameFinal = "No printer found.";
       var printers;
       var labelXml = '<?xml version="1.0" encoding="utf-8"?>\
@@ -96,7 +97,7 @@
       $( document ).ready(function() {
       
         function onLabelFailure(error) {
-          console.log("Unable to update label text.\n" + error.message);
+          alert("Unable to update label text.\n" + error.message);
         }
 
         google.script.run.withSuccessHandler(function(ret){
@@ -106,8 +107,8 @@
         }).withFailureHandler(onLabelFailure).getFormattedLast();
 
         google.script.run.withSuccessHandler(function(ret){
-          labelText = ret;
-          var obj = $("#addressLabelPreview").text(labelText);
+          addressLabelText = ret;
+          var obj = $("#addressLabelPreview").text(addressLabelText);
           obj.html(obj.html().replace(/\n/g,'<br/>'));
         }).withFailureHandler(onLabelFailure).getAddressFormatLastRow();
         
@@ -152,6 +153,13 @@
             obj.html(obj.html().replace(/\n/g,'<br/>'));
             console.log("Updated label text sucessfully.");
         }).withFailureHandler(onLabelFailure).getFormattedActiveRow();
+
+          google.script.run.withSuccessHandler(function(ret){
+            addressLabelText = ret;
+            var obj = $("#addressLabelPreview").text(addressLabelText);
+            obj.html(obj.html().replace(/\n/g,'<br/>'));
+        }).withFailureHandler(onLabelFailure).getAddressFormatActiveRow();
+
         })
 
         $( "#printButton" ).click(function() {
@@ -175,25 +183,24 @@
         }
         );
 
-        // $( "#printAddressButton" ).click(function() {
-        //    try
-        //     {
-        //         var label = dymo.label.framework.openLabelXml(labelXml);
-        //         // set label text
-        //         label.setObjectText("Text", labelText);
-        //         console.log("Printing...");
-        //         // finally print the label
-        //         for(let i = count; i > 0; i--){
-        //           label.print(printerNameFinal);
-        //         }
+        $( "#printAddressButton" ).click(function() {
+           try
+            {
+                var label = dymo.label.framework.openLabelXml(labelXml);
+                // set label text
+                label.setObjectText("Text", addressLabelText);
+                console.log("Printing...");
+                // finally print the label
+                label.print(printerNameFinal);
+
                 
-        //     }
-        //     catch(e)
-        //     {
-        //         alert(e.message || e);
-        //     }
-        // }
-        // );
+            }
+            catch(e)
+            {
+                alert(e.message || e);
+            }
+        }
+        );
         
       });
     </script>
