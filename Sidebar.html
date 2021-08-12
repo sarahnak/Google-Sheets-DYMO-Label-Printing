@@ -20,19 +20,17 @@
   </head>
   <body>
     <div class="sidebar branding-below">
-      <div class="block form-group">
-        <b>Label text preview: </b>
-        <p class="text-box" id="labelPreview"> Sample label text here. </p>
-        <button id="labelRefreshButton">Create label from selected cell / row</button>
+      <div id="mailingAddressDiv">
+        <b>Mailing address label: </b>
+        <p class="text-box" id="addressLabelPreview"> Sample label text here.</p>
+        <button id="printAddressButton" class="blue">Print</button>
       </div>
       <br>
       <hr>
-      <div id="printersDiv">
-        <b> Printer: </b>
-        <p id="printerName"></p>
-      </div>
-      <div>
-        <b>Number of blood sample labels:</b>
+      <div id="bloodSampleDiv">
+        <b>Blood sample label: </b>
+        <p class="text-box" id="labelPreview"> Sample label text here. </p>
+        <label for="numbers">Number to print:</label>
         <select name="numbers" id="printCount">
           <option value="1">1</option>
           <option value="2">2</option>
@@ -41,13 +39,20 @@
           <option value="5">5</option>
         </select>
         <br>
-        <br>
         <button id="printButton" class="button blue">Print</button>
-	    </div>
+      </div>
+      <hr>
+      <button id="labelRefreshButton">Update labels with selected cell / row</button>
+      <br>
+      <br>
+      <div id="printersDiv">
+        <b>Printer: </b>
+        <p id="printerName"></p>
+      </div>
     </div>
-    <div class="sidebar bottom">
-      <textarea class="width-100 secondary" id="console-output" rows="10"></textarea>
-    </div>
+    <!-- <div class="sidebar bottom">
+      <textarea class="width-100 secondary" id="console-output" rows="5"></textarea>
+    </div> -->
 
   <!-- DYMO just refuses to host this file with https. this will not load without https. try hosting on github and linking to the raw git  -->
   <!-- <script src="http://labelwriter.com/software/dls/sdk/js/DYMO.Label.Framework.3.0.js"></script> -->
@@ -169,7 +174,7 @@
 
 
     <!-- Writing the console output to the sidebar. From Dymo Cryolabel -->
-    <script> 
+    <!-- <script> 
     var logger = (function() {
       // Store the pointer to the runtime's console.log function.
       var nativeLog = console.log;
@@ -190,6 +195,6 @@
         element.scrollTop = element.scrollHeight; 
       }
     })();
-    </script>
+    </script> -->
   </body>
 </html>
