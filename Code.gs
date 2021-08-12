@@ -32,8 +32,9 @@ function rowValuesToLabelFormat(values){
   return label;
 }
 
+
 /**
- * Format the form repsonse currently selected (cell or row in the "Registration" sheet) as label text.
+ * Format the form repsonse currently selected (cell or row in the "Registration" sheet) as blood sample label text.
  */
 function getFormattedActiveRow(){
   var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
@@ -49,7 +50,7 @@ function getFormattedActiveRow(){
 }
 
 /**
- * Formats the form response at the bottom of the "Registration" sheet as label text.
+ * Formats the form response at the bottom of the "Registration" sheet as blood sample label text.
  */
 function getFormattedLast(){
   var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
@@ -61,6 +62,53 @@ function getFormattedLast(){
   Logger.log(label);
 
   return label;
+}
+
+/**
+ * Takes in values from a range of one row (2D array), returns it formatted as a mailing address string literal.
+ */
+function rowValuesToAddressLabelFormat(values){
+  Logger.log(values);
+  var firstName = values[0][0];
+  var lastName = values[0][1];
+  var street = values[0][5];
+  var city = values[0][6];
+  var state = values[0][7];
+  var zipcode = values[0][8]
+  var label = `${firstName} ${lastName}\n${street}\n${city},${state}  ${zipcode}`;
+  
+  return label;
+}
+
+/**
+ * Format the last form repsonse as mailing address label text.
+ */
+
+function getAddressFormatLastRow(){
+  var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
+  var lastRowIndex = registration.getLastRow();
+  var range = registration.getRange(lastRowIndex, 3, 1, 9);
+
+  var values = range.getValues();
+  var label = rowValuesToAddressLabelFormat(values);
+  Logger.log(label);
+  return label;
+}
+
+/**
+ * Format the form repsonse currently selected (cell or row in the "Registration" sheet) as mailing address label text.
+ */
+function getFormattedActiveRow(){
+  var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
+  var rowIndex = registration.getActiveCell().getRowIndex();
+  var range = registration.getRange(rowIndex, 3, 1, 9);
+
+  var values = range.getValues()
+  var label = rowValuesToLabelFormat(values);
+
+  Logger.log(label);
+  return label;
+
 }
 
 //Methods below were used as a temporary workaround for printing before sidebar was completed - label text could be copy/pasted into DYMO connect to print.
