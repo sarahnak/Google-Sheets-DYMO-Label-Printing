@@ -6,7 +6,7 @@
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
   ui.createMenu('Labels')
-    .addItem('Open Print Menu', 'showSidebarRemoteDYMO')
+    .addItem('Open Print Menu', 'showSidebar')
     // .addItem('print (local js file)', 'showSidebarLocalDYMO')
     .addSeparator()
     .addItem('Format last response as text', 'writeLastResponse')
