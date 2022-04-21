@@ -25,7 +25,17 @@ function rowValuesToLabelFormat(values){
   Logger.log(formattedDate);
   var firstName = values[0][1];
   var lastName = values[0][2];
-  var gender = values[0][3];
+  //temp fix for gender responses in Mongolian
+  var gender;
+  if(values[0][3] == "Эр"){
+    gender = "Male";
+  }
+  else if(values[0][3] == "Эм"){
+    gender = "Female";
+  }
+  else{
+    gender = values[0][3];
+  }
   var formattedBirthdate = Utilities.formatDate(values[0][4], "PST", "MM/dd/yyyy");
   var label = `${formattedDate}\n${lastName}, ${firstName}\n${gender}\nDOB: ${formattedBirthdate}`;
   
@@ -34,10 +44,10 @@ function rowValuesToLabelFormat(values){
 
 
 /**
- * Format the form repsonse currently selected (cell or row in the "Registration" sheet) as blood sample label text.
+ * Format the form response currently selected (cell or row in any sheet) as blood sample label text.
  */
 function getFormattedActiveRow(){
-  var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
+  var registration = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var rowIndex = registration.getActiveCell().getRowIndex();
   var range = registration.getRange(rowIndex, 2, 1, 5);
 
@@ -50,10 +60,10 @@ function getFormattedActiveRow(){
 }
 
 /**
- * Formats the form response at the bottom of the "Registration" sheet as blood sample label text.
+ * Formats the form response at the bottom of the currently selected sheet as blood sample label text.
  */
 function getFormattedLast(){
-  var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
+  var registration = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var lastRowIndex = registration.getLastRow();
   var range = registration.getRange(lastRowIndex, 2, 1, 5);
 
@@ -75,17 +85,17 @@ function rowValuesToAddressLabelFormat(values){
   var city = values[0][6];
   var state = values[0][7];
   var zipcode = values[0][8]
-  var label = `${firstName} ${lastName}\n${street}\n${city},${state}  ${zipcode}`;
+  var label = `${firstName} ${lastName}\n${street}\n${city}, ${state}  ${zipcode}`;
   
   return label;
 }
 
 /**
- * Format the last form repsonse as mailing address label text.
+ * Format the last form response as mailing address label text.
  */
 
 function getAddressFormatLastRow(){
-  var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
+  var registration = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var lastRowIndex = registration.getLastRow();
   var range = registration.getRange(lastRowIndex, 3, 1, 9);
 
@@ -96,10 +106,10 @@ function getAddressFormatLastRow(){
 }
 
 /**
- * Format the form repsonse currently selected (cell or row in the "Registration" sheet) as mailing address label text.
+ * Format the form response currently selected (cell or row in the active sheet) as mailing address label text.
  */
 function getAddressFormatActiveRow(){
-  var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
+  var registration = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
   var rowIndex = registration.getActiveCell().getRowIndex();
   var range = registration.getRange(rowIndex, 3, 1, 9);
 
@@ -138,7 +148,7 @@ function writeActiveResponse(){
  */
 
 function writeAllResponses(){
-    var registration = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Registration");
+    var registration = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     var labels = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Labels");
 
     //spreadsheet indexes start at 1
