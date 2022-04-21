@@ -38,6 +38,7 @@
           <option value="5">5</option>
         </select>
         <br>
+        <br>
         <button id="printButton" class="button blue">Print</button>
       </div>
       <hr>
@@ -56,12 +57,12 @@
 
   <!-- DYMO just refuses to host this file with https. this will not load without https. try hosting on github and linking to the raw git  -->
   <!-- <script src="http://labelwriter.com/software/dls/sdk/js/DYMO.Label.Framework.3.0.js"></script> -->
-  <script src="https://min.gitcdn.link/repo/sarahnak/Google-Sheets-DYMO-Label-Printing/main/DYMO.Label.Framework.3.0.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/sarahnak/Google-Sheets-DYMO-Label-Printing@main/DYMO.Label.Framework.3.0.js"></script>
  
     <!-- JQuery import -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-
+<script> $.getScript('https://cdn.jsdelivr.net/gh/sarahnak/Google-Sheets-DYMO-Label-Printing@main/DYMO.Label.Framework.3.0.js');</script>
 
     <script>
       var labelText = "Sample label text here.";
@@ -191,9 +192,7 @@
                 label.setObjectText("Text", addressLabelText);
                 console.log("Printing...");
                 // finally print the label
-                label.print(printerNameFinal);
-
-                
+                label.print(printerNameFinal);             
             }
             catch(e)
             {
